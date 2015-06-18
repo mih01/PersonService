@@ -49,6 +49,7 @@ public class PersonEndpointTest {
 		Person p = new Person();
 		p.setName(NAME1);
 
+		System.out.println("create");
 		r = ClientBuilder
 				.newClient()
 				.target(URI.create(new URL(webappUrl, "api/people")
@@ -58,28 +59,35 @@ public class PersonEndpointTest {
 				.getStatusCode());
 
 		String location = r.getHeaderString("Location");
+		System.out.println(location);
 
-		Assert.assertTrue(location != null);
-		Assert.assertTrue(location.trim().length() > 0);
+		Assert.assertTrue(location != null && location.trim().length() > 0);
 
+		System.out.println("read");
 		Person p2 = ClientBuilder.newClient().target(location)
 				.request("application/json").get(Person.class);
 
+		System.out.println(p2);
+
 		Assert.assertNotNull(p2);
-		Assert.assertTrue(p.getName().compareTo(p2.getName()) == 0);
-		Assert.assertTrue(p2.getId() > 0);
+		Assert.assertTrue(p.getName().compareTo(p2.getName()) == 0
+				&& p2.getId() > 0);
 
 		p2.setName(NAME2);
 
+		System.out.println("update");
 		r = ClientBuilder.newClient().target(location).request()
 				.put(Entity.json(p2));
 
 		Assert.assertTrue(r.getStatus() == Response.Status.NO_CONTENT
 				.getStatusCode());
 
+		System.out.println("delete");
 		r = ClientBuilder.newClient().target(location).request().delete();
 
 		Assert.assertTrue(r.getStatus() == Response.Status.NO_CONTENT
 				.getStatusCode());
+
+		System.out.println("finished");
 	}
 }

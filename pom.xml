@@ -13,6 +13,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.arquillian_core>1.1.5.Final</version.arquillian_core>
 		<version.junit>4.12</version.junit>
+		<version.wildfly.maven.plugin>1.0.2.Final</version.wildfly.maven.plugin>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -47,26 +48,43 @@
 			<artifactId>junit</artifactId>
 			<version>${version.junit}</version>
 			<scope>test</scope>
-		</dependency>
+		</dependency> 
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-client</artifactId>
 			<version>3.0.11.Final</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-jackson-provider</artifactId>
 			<version>3.0.11.Final</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>foo</finalName>
+		<finalName>PersonService</finalName>
 		<plugins>
 			<plugin>
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+            <!-- WildFly plugin to deploy war -->
+			<plugin>
+				<groupId>org.wildfly.plugins</groupId>
+				<artifactId>wildfly-maven-plugin</artifactId>
+				<version>${version.wildfly.maven.plugin}</version>
+				<configuration>
+					<filename>${project.build.finalName}.war</filename>
+                    <!--
+					<hostname>${wildfly-hostname}</hostname>
+					<port>${wildfly-port}</port>
+					<username>${wildfly-username}</username>
+                    <password>${wildfly-password}</password>
+                    -->
 				</configuration>
 			</plugin>
 		</plugins>
@@ -78,7 +96,7 @@
 				<plugins>
 					<plugin>
 						<artifactId>maven-war-plugin</artifactId>
-						<version>2.3</version>
+						<version>2.5</version>
 						<configuration>
 							<failOnMissingWebXml>false</failOnMissingWebXml>
 						</configuration>
